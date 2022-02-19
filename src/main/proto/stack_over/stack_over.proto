@@ -1,0 +1,19 @@
+syntax = "proto3";
+package stack_over;
+
+option java_package = "org.jxfs.grpc.stackover2.api";
+option java_multiple_files = true;
+option java_outer_classname = "BackupApiProto";
+
+message Security {
+  string tickerSymbol = 1;
+  string security = 2;
+}
+
+message StockStaticManyDataRequest {
+  repeated string tickerSymbols = 1;
+}
+
+service StockStaticDataRequestService {
+  rpc getManyStockStatics(StockStaticManyDataRequest) returns (stream Security) {}
+}

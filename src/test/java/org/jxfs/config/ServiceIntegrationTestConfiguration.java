@@ -17,8 +17,5 @@ import net.devh.boot.grpc.server.autoconfigure.GrpcServerFactoryAutoConfiguratio
 		GrpcClientAutoConfiguration.class,
 		GrpcStarterApplication.class})
 public class ServiceIntegrationTestConfiguration {
-//	@Bean(name = "stocks")
-//	public StockStaticDataRequestService stockStaticDataRequestService() {
-//		return new StockStaticDataRequestService();
-//	}
+	// add mock beans here of needed. 
 }

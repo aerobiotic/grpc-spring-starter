@@ -1,6 +1,9 @@
 
 package org.jxfs.stackover2;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;
@@ -9,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.jxfs.config.ServiceIntegrationTestConfiguration;
+import org.jxfs.grpc.stackover2.api.Security;
 import org.jxfs.grpc.stackover2.api.StockStaticDataRequestServiceGrpc.StockStaticDataRequestServiceBlockingStub;
 import org.jxfs.grpc.stackover2.api.StockStaticManyDataRequest;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -64,8 +68,20 @@ class TestGprc {
         StockStaticManyDataRequest request = StockStaticManyDataRequest.newBuilder()
             .addAllTickerSymbols(List.of("AAPL"))
             .build();
-        stub.getManyStockStatics(request).forEachRemaining(security -> {
-            log.info("security={}", security);
-        });
+        
+        int count = 0;
+        
+        for (Iterator iterator = stub.getManyStockStatics(request); iterator.hasNext();) {
+			Security security = (Security) iterator.next();
+			log.info("security={}", security);
+			if (count == 0) {
+				assertEquals("TEST-MANY", security.getSecurity());
+			} else {
+				assertEquals("TEST-MORE", security.getSecurity());
+			}
+			count++;
+		}
+        
+        assertEquals(2,  count);
 	}
 }
